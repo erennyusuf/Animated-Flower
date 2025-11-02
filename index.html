@@ -5,12 +5,57 @@
   <meta charset="UTF-8">
   <title>Flowers</title>
   <link rel="stylesheet" href="./style.css">
+<style>
+    #startScreen {
+      position: fixed;
+      inset: 0;
+      background: black;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.8s ease;
+    }
 
+    #startScreen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #startButton {
+      padding: 16px 40px;
+      font-size: 22px;
+      border: none;
+      border-radius: 12px;
+      background: #ff3366;
+      color: #fff;
+      cursor: pointer;
+      font-family: "Poppins", sans-serif;
+      box-shadow: 0 0 20px rgba(255, 51, 102, 0.6);
+      transition: transform 0.2s;
+    }
+
+    #startButton:hover {
+      transform: scale(1.08);
+    }
+
+    #startButton:active {
+      transform: scale(0.96);
+    }
+  </style>
 </head>
 
 <body>
 
   <body class="not-loaded">
+      <div id="startScreen">
+    <button id="startButton">Click Me</button>
+  </div>
+
+  <audio id="bg-music" loop>
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
     <div class="night"></div>
     <div class="flowers">
       <div class="flower flower--1">
@@ -312,6 +357,33 @@
 
   <script src="./script.js"></script>
 
+  <script>
+    const startBtn = document.getElementById('startButton');
+    const startScreen = document.getElementById('startScreen');
+    const music = document.getElementById('bg-music');
+
+    music.volume = 0.5;
+
+    startBtn.addEventListener('click', async () => {
+      try {
+        await music.play();
+      } catch (err) {
+        console.warn("Tarayıcı otomatik çalmayı engelledi.");
+      }
+
+
+      startScreen.classList.add('hidden');
+
+
+      setTimeout(() => startScreen.remove(), 800);
+
+
+      const c = setTimeout(() => {
+        document.body.classList.remove("not-loaded");
+        clearTimeout(c);
+      }, 1000);
+    });
+  </script>
 </body>
 
 </html>
